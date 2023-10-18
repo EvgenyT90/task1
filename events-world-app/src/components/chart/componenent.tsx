@@ -9,6 +9,7 @@ import {
     Legend,
     ChartData,
 } from "chart.js";
+import { Container } from "react-bootstrap";
 import { Bar } from "react-chartjs-2";
 //import faker from 'faker';
 
@@ -66,5 +67,5 @@ export const ChartMy = ({ props }: { props: IChartData[] }) => {
     };
 
     content = <Bar options={options} data={data} />;
-    return content;
+    return <Container>{content}</Container>;
 };
