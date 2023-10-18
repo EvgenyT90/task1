@@ -143,6 +143,7 @@ export const Main: React.FC = () => {
                         aria-label="Example text with button addon"
                         aria-describedby="basic-addon1"
                         onChange={(event) => locChange(event)}
+                        placeholder="Введите наименование города и нажмите кнопку"
                     />
                 </InputGroup>
             </Container>
