@@ -4,10 +4,29 @@ import { Container } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
-import { Chart } from "chart.js/auto";
+import { ChartMy } from "../../components/chart/componenent";
 
 export const Main: React.FC = () => {
     const [loc, setLoc] = useState("Omsk");
+    interface ChartData {
+        date: any;
+        pm10: any;
+        pm10Avg: any;
+        pm2_5: any;
+        pm2_5Avg: any;
+        countRow: any;
+    }
+    const [chartData, setChartData] = useState<ChartData[]>([
+        {
+            date: new Date(),
+            pm10: 0,
+            pm10Avg: 0,
+            pm2_5: 0,
+            pm2_5Avg: 0,
+            countRow: 0,
+        },
+    ]);
+
     const locChange = (event: any) => {
         setLoc(event.target.value);
         console.log(event.target.value);
@@ -24,100 +43,64 @@ export const Main: React.FC = () => {
     function append(parent: any, el: any) {
         return parent.appendChild(el);
     }
-    // function showChartJs(valForChart: any) {
-    //     const ctx = document.getElementById("myChart");
 
-    //     new Chart(ctx, {
-    //         type: "bar",
-    //         data: {
-    //             labels: valForChart.map((data: any) =>
-    //                 data.date.toLocaleDateString("ru-RU"),
-    //             ),
-    //             datasets: [
-    //                 {
-    //                     label: "Среднее количество частиц pm10",
-    //                     data: valForChart.map((data: any) => data.pm10Avg),
-    //                     borderWidth: 1,
-    //                 },
-    //                 {
-    //                     label: "Среднее количество частиц pm2_5",
-    //                     data: valForChart.map((data: any) => data.pm2_5Avg),
-    //                     borderWidth: 1,
-    //                 },
-    //             ],
-    //         },
-    //         options: {
-    //             scales: {
-    //                 y: {
-    //                     beginAtZero: true,
-    //                 },
-    //             },
-    //             plugins: {
-    //                 title: {
-    //                     display: true,
-    //                     text: "Средние значения по дня для частиц",
-    //                 },
-    //             },
-    //         },
-    //     });
-    // }
+    const getAvgValue = (data: any) => {
+        let newArr = [];
+        let firstRowValue = data[0][0][0].split("T")[0];
+        var tempPm10 = 0;
+        var tempPm2_5 = 0;
+        var count = 0;
 
-    // function getAvgValue(data: any) {
-    //     let newArr = [];
-    //     let firstRowValue = data[0][0][0].split("T")[0];
-    //     var tempPm10 = 0;
-    //     var tempPm2_5 = 0;
-    //     var count = 0;
+        for (let index = 0; index < data[0][0].length; index++) {
+            let oneDate: ChartData = {
+                date: new Date(),
+                pm10: 0,
+                pm10Avg: 0,
+                pm2_5: 0,
+                pm2_5Avg: 0,
+                countRow: 0,
+            };
 
-    //     for (let index = 0; index < data[0][0].length; index++) {
-    //         let oneDate = {
-    //             date: new Date(),
-    //             pm10: 0,
-    //             pm10Avg: 0,
-    //             pm2_5: 0,
-    //             pm2_5Avg: 0,
-    //             countRow: 0,
-    //         };
+            if (firstRowValue === data[0][0][index].split("T")[0]) {
+                if (data[1][0][index] !== null) {
+                    tempPm10 = +data[1][0][index];
+                }
 
-    //         if (firstRowValue === data[0][0][index].split("T")[0]) {
-    //             data[1][0][index] !== null
-    //                 ? (tempPm10 = +data[1][0][index])
-    //                 : tempPm10;
-    //             data[2][0][index] !== null
-    //                 ? (tempPm2_5 = +data[2][0][index])
-    //                 : tempPm2_5;
+                if (data[2][0][index] !== null) {
+                    tempPm2_5 = +data[2][0][index];
+                }
 
-    //             count++;
-    //         } else {
-    //             oneDate = {
-    //                 date: new Date(firstRowValue),
-    //                 pm10: tempPm10,
-    //                 pm10Avg: tempPm10 / count,
-    //                 pm2_5: tempPm2_5,
-    //                 pm2_5Avg: tempPm2_5 / count,
-    //                 countRow: count,
-    //             };
-    //             newArr.push(oneDate);
-    //             firstRowValue = data[0][0][index].split("T")[0];
-    //             tempPm10 = data[1][0][index];
-    //             tempPm2_5 = data[2][0][index];
-    //             count = 1;
-    //         }
+                count++;
+            } else {
+                oneDate = {
+                    date: new Date(firstRowValue),
+                    pm10: tempPm10,
+                    pm10Avg: tempPm10 / count,
+                    pm2_5: tempPm2_5,
+                    pm2_5Avg: tempPm2_5 / count,
+                    countRow: count,
+                };
+                newArr.push(oneDate);
+                firstRowValue = data[0][0][index].split("T")[0];
+                tempPm10 = data[1][0][index];
+                tempPm2_5 = data[2][0][index];
+                count = 1;
+            }
 
-    //         if (index == data[0][0].length - 1) {
-    //             oneDate = {
-    //                 date: new Date(firstRowValue),
-    //                 pm10: tempPm10,
-    //                 pm10Avg: tempPm10 / count,
-    //                 pm2_5: tempPm2_5,
-    //                 pm2_5Avg: tempPm2_5 / count,
-    //                 countRow: count,
-    //             };
-    //             newArr.push(oneDate);
-    //         }
-    //     }
-    //     return newArr;
-    // }
+            if (index == data[0][0].length - 1) {
+                oneDate = {
+                    date: new Date(firstRowValue),
+                    pm10: tempPm10,
+                    pm10Avg: tempPm10 / count,
+                    pm2_5: tempPm2_5,
+                    pm2_5Avg: tempPm2_5 / count,
+                    countRow: count,
+                };
+                newArr.push(oneDate);
+            }
+        }
+        return newArr;
+    };
 
     const getWeather = (event: any) => {
         fetch(API_URL_GEO_DATA)
@@ -138,25 +121,24 @@ export const Main: React.FC = () => {
                                 [data.hourly.pm10],
                                 [data.hourly.pm2_5],
                             ];
-                            let tableHead = createNode("thead");
-                            let tableBody = createNode("tbody");
-                            let tr = createNode("tr");
-                            tr.innerHTML =
-                                '<td style="border: 1px solid">Время</td><td style="border: 1px solid">количество частиц pm10</td><td style="border: 1px solid"> количество частиц pm2_5</td>';
-                            append(tableHead, tr);
-                            append(ui, tableHead);
-                            for (
-                                let index = 0;
-                                index < arr[0][0].length;
-                                index++
-                            ) {
-                                let tr = createNode("tr");
-                                tr.innerHTML = `<td style='border: 1px solid'>${arr[0][0][index]}</td><td style='border: 1px solid'>${arr[1][0][index]}</td><td style='border: 1px solid'>${arr[2][0][index]}</td>`;
-                                append(tableBody, tr);
-                            }
-                            append(ui, tableBody);
-                            //const valForChart = getAvgValue(arr);
-                            // showChartJs(valForChart);
+                            // let tableHead = createNode("thead");
+                            // let tableBody = createNode("tbody");
+                            // let tr = createNode("tr");
+                            // tr.innerHTML =
+                            //     '<td style="border: 1px solid">Время</td><td style="border: 1px solid">количество частиц pm10</td><td style="border: 1px solid"> количество частиц pm2_5</td>';
+                            // append(tableHead, tr);
+                            // append(ui, tableHead);
+                            // for (
+                            //     let index = 0;
+                            //     index < arr[0][0].length;
+                            //     index++
+                            // ) {
+                            //     let tr = createNode("tr");
+                            //     tr.innerHTML = `<td style='border: 1px solid'>${arr[0][0][index]}</td><td style='border: 1px solid'>${arr[1][0][index]}</td><td style='border: 1px solid'>${arr[2][0][index]}</td>`;
+                            //     append(tableBody, tr);
+                            // }
+                            // append(ui, tableBody);
+                            setChartData(getAvgValue(arr));
                         });
                 }
             })
@@ -182,7 +164,9 @@ export const Main: React.FC = () => {
                     />
                 </InputGroup>
             </Container>
-            <Container className="mt-3 myC2"></Container>
+            <Container className="mt-3 myC2">
+                <ChartMy props={chartData} />
+            </Container>
         </main>
     );
 };
