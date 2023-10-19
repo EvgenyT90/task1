@@ -1,1 +1,1 @@
-import { ChartMy } from "./componenent";
+export { ChartMy } from "./componenent";

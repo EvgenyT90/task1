@@ -1,1 +1,1 @@
-import { TableData } from "./componenent";
+export { TableData } from "./componenent";

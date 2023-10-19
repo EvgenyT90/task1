@@ -5,7 +5,7 @@ export const TableData = ({ props }: { props: any }) => {
     let content: JSX.Element;
 
     content = (
-        <div style={{ height: "80vh", overflowY: "auto" }}>
+        <div style={{ height: "77vh", overflowY: "auto" }}>
             <Table>
                 <thead>
                     <tr>
@@ -29,23 +29,9 @@ export const TableData = ({ props }: { props: any }) => {
         </div>
     );
 
-    return <Container>{content}</Container>;
+    return (
+        <Container className="shadow p-3 mb-5 bg-white rounded">
+            {content}
+        </Container>
+    );
 };
-
-// let tableHead = createNode("thead");
-// let tableBody = createNode("tbody");
-// let tr = createNode("tr");
-// tr.innerHTML =
-//     '<td style="border: 1px solid">Время</td><td style="border: 1px solid">количество частиц pm10</td><td style="border: 1px solid"> количество частиц pm2_5</td>';
-// append(tableHead, tr);
-// append(ui, tableHead);
-// for (
-//     let index = 0;
-//     index < arr[0][0].length;
-//     index++
-// ) {
-//     let tr = createNode("tr");
-//     tr.innerHTML = `<td style='border: 1px solid'>${arr[0][0][index]}</td><td style='border: 1px solid'>${arr[1][0][index]}</td><td style='border: 1px solid'>${arr[2][0][index]}</td>`;
-//     append(tableBody, tr);
-// }
-// append(ui, tableBody);

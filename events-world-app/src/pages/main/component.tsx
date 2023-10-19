@@ -1,13 +1,11 @@
 import React, { useState } from "react";
-import { Navigation } from "../../components/navbar";
 import { Container } from "react-bootstrap";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
-import { ChartMy } from "../../components/chart/componenent";
-import { TableData } from "../../components/table-data/componenent";
+import { ChartMy, TableData, Navigation } from "../../components/";
 
 interface ChartData {
     date: any;
@@ -152,6 +150,7 @@ export const Main: React.FC = () => {
                     <Col sm={4}>
                         <TableData props={tableData} />
                     </Col>
+
                     <Col sm={8}>
                         <ChartMy props={chartData} />
                     </Col>

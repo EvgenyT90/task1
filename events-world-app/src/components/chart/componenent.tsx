@@ -67,5 +67,9 @@ export const ChartMy = ({ props }: { props: IChartData[] }) => {
     };
 
     content = <Bar options={options} data={data} />;
-    return <Container>{content}</Container>;
+    return (
+        <Container className="shadow p-3 mb-5 bg-white rounded">
+            {content}
+        </Container>
+    );
 };
