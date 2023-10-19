@@ -18,16 +18,16 @@ interface ChartData {
 
 export const Main: React.FC = () => {
     const [loc, setLoc] = useState("Omsk");
-    const [tableData, setTableData] = useState<any>([["0"], ["0"], ["0"]]);
+    const [tableData, setTableData] = useState<any>([["1"], ["2"], ["3"]]);
 
     const [chartData, setChartData] = useState<ChartData[]>([
         {
             date: new Date(),
-            pm10: 0,
-            pm10Avg: 0,
-            pm2_5: 0,
-            pm2_5Avg: 0,
-            countRow: 0,
+            pm10: 1,
+            pm10Avg: 2,
+            pm2_5: 3,
+            pm2_5Avg: 4,
+            countRow: 5,
         },
     ]);
 
