@@ -6,6 +6,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import { ChartMy, TableData, Navigation } from "../../components/";
+import { Alert, Space, Spin } from "antd";
 
 interface ChartData {
     date: any;
@@ -17,6 +18,7 @@ interface ChartData {
 }
 
 export const Main: React.FC = () => {
+    const [spinner, setSpinner] = useState(false);
     const [loc, setLoc] = useState("Omsk");
     const [tableData, setTableData] = useState<any>([["1"], ["2"], ["3"]]);
 
@@ -98,6 +100,7 @@ export const Main: React.FC = () => {
     };
 
     const getWeather = (event: any) => {
+        setSpinner(true);
         fetch(API_URL_GEO_DATA)
             .then((resp) => resp.json())
             .then(function (data) {
@@ -121,6 +124,9 @@ export const Main: React.FC = () => {
                             setChartData(getAvgValue(arr));
                         });
                 }
+            })
+            .then(() => {
+                setSpinner(false);
             })
             .catch((error) => {});
     };
@@ -148,11 +154,37 @@ export const Main: React.FC = () => {
             <Container>
                 <Row>
                     <Col sm={4}>
-                        <TableData props={tableData} />
+                        {spinner && (
+                            <Space
+                                direction="vertical"
+                                style={{ width: "100%" }}
+                            >
+                                <Spin tip="Загрузка" size="large">
+                                    <div
+                                        className="content"
+                                        style={{ padding: "200px" }}
+                                    />
+                                </Spin>
+                            </Space>
+                        )}
+                        {!spinner && <TableData props={tableData} />}
                     </Col>
 
                     <Col sm={8}>
-                        <ChartMy props={chartData} />
+                        {spinner && (
+                            <Space
+                                direction="vertical"
+                                style={{ width: "100%" }}
+                            >
+                                <Spin tip="Загрузка" size="large">
+                                    <div
+                                        className="content"
+                                        style={{ padding: "200px" }}
+                                    />
+                                </Spin>
+                            </Space>
+                        )}
+                        {!spinner && <ChartMy props={chartData} />}
                     </Col>
                 </Row>
             </Container>
